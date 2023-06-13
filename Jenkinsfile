@@ -6,6 +6,7 @@ pipeline {
         stage('Build') { 
             agent {
                 docker {
+                    label 'jenkins-ec2-fleet'
                     image 'python:2-alpine' 
                 }
             }
