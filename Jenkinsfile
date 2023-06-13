@@ -15,5 +15,21 @@ pipeline {
                 stash(name: 'compiled-results', includes: 'sources/*.py*') 
             }
         }
+        stage('Test') {
+            agent {
+                docker {
+                    label 'jenkins-ec2-fleet'
+                    image 'qnib/pytest'
+                }
+            }
+            steps {
+                sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
+            }
+        }
     }
 }
